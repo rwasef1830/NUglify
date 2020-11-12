@@ -44,7 +44,7 @@ namespace NUglify.JavaScript
             this.EvalTreatment = EvalTreatment.Ignore;
             this.InlineSafeStrings = true;
             this.MacSafariQuirks = true;
-            this.PreserveImportantComments = true;
+            this.CommentMode = JsComment.Important;
             this.QuoteObjectLiteralProperties = false;
             this.StrictMode = false;
             this.StripDebugStatements = true;
@@ -91,7 +91,7 @@ namespace NUglify.JavaScript
                 IgnoreAllErrors = this.IgnoreAllErrors,
                 IgnoreErrorList = this.IgnoreErrorList,
                 IgnorePreprocessorDefines = this.IgnorePreprocessorDefines,
-                IndentSize = this.IndentSize,
+                Indent = this.Indent,
                 InlineSafeStrings = this.InlineSafeStrings,
                 KillSwitch = this.KillSwitch,
                 KnownGlobalNamesList = this.KnownGlobalNamesList,
@@ -104,7 +104,7 @@ namespace NUglify.JavaScript
                 PreprocessOnly = this.PreprocessOnly,
                 PreprocessorDefineList = this.PreprocessorDefineList,
                 PreserveFunctionNames = this.PreserveFunctionNames,
-                PreserveImportantComments = this.PreserveImportantComments,
+                CommentMode = this.CommentMode,
                 QuoteObjectLiteralProperties = this.QuoteObjectLiteralProperties,
                 RemoveFunctionExpressionNames = this.RemoveFunctionExpressionNames,
                 RemoveUnneededCode = this.RemoveUnneededCode,
@@ -735,15 +735,19 @@ namespace NUglify.JavaScript
             get; set;
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to preserve important comments in the output.
-        /// Default is true, preserving important comments. Important comments have an exclamation
-        /// mark as the very first in-comment character (//! or /*!).
-        /// </summary>
+        [Obsolete("Use CommentMode instead")]
         public bool PreserveImportantComments
         {
-            get; set;
+	        get => this.CommentMode != JsComment.None;
+	        set => this.CommentMode = this.CommentMode == JsComment.None ? JsComment.Important : this.CommentMode;
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to preserve comments in the output.
+        /// Default is Important, preserving important comments only.
+        /// Important comments have an exclamation mark as the very first in-comment character (//! or /*!).
+        /// </summary>
+        public JsComment CommentMode { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to always quote object literal property names.
